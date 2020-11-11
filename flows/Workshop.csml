@@ -1,0 +1,146 @@
+start:
+// ############################################################
+// It's your turn now! Fill in the missing part of the chatbot
+// ############################################################
+
+/* Delete this line to start
+
+
+
+  remember is_sorted = false
+  remember size = false
+  remember category = false
+  remember search = false
+  remember fav = false
+
+	say Typing(3000)
+	say "Hi, my name is Bookobot, I am here to help you find the perfect book 📚"
+	goto actions
+
+actions:
+	say Question("How would you like to seach your book?",
+	buttons=[
+    Button("Search by title 🔍") as search_btn,
+		Button("Search with filters 🤏") as filters_btn,
+		Button("My personnal favorite books ❤️") as fav_btn
+		])
+	hold
+	if (event match filters_btn) {
+		remember fav = false
+    goto filter_books
+	}
+	else if (event match search_btn) {
+		remember fav = false
+    goto search_books
+	}
+  else {
+    remember fav = true
+    goto sort_books
+  }
+
+
+filter_books:
+  // 1 - Write the question that the chatbot should ask
+  // Hint: you should check the buttons below 😉
+  say Question("????",
+  button_type="quick_reply",
+	buttons=[
+    Button("Entrepreneurship"),
+    Button("Career change"),
+    Button("Motivational")
+  ])
+  // 2 - Give the chatbot the instruction to wait for the user to reply
+  ????
+  // 3 - Now, you need the chatbot to remember the user answer
+  // by placing it in a variable named  "category"
+  ???? category = event
+  say "I also love {{category}} books 🔥"
+  goto book_size
+  
+book_size:
+  say Question("What book size do you like best?",
+	buttons=[
+		Button("Less than 400 pages") as l400_btn,
+		Button("More than 400 pages") as m400_btn
+		])
+  hold
+  // 4 - Check which button the user clicked on
+  ???? (event match m400_btn) {
+    remember size = 400
+  }
+  ???? {
+    remember size = 2000
+  }
+  // 5 - Now the chatbot needs to go to the step `sort_books`
+  goto sort_books
+
+
+sort_books:
+  // 6 - Something's missing here...
+  ???? Question("Do you want me to sort the results by rating?",
+	buttons=[
+    // 7 - Add two buttons : Yes and No
+    ????("Yes 🤩") as yes_btn,
+    ????("No 🤔") as no_btn
+	])
+  // 8 - Again, the chatbot needs to wait for the user to reply
+  ????
+  // 9 - If the user has clicked on "Yes", create a varaible named `is_sorted`
+  // and place the value `true` inside the variable
+  if (event match yes_btn) {
+    ???? ???? = true
+  } else {
+    ???? ???? = false
+  }
+  // 10 - Finaly, the chatbot needs to goto the step named `display`
+  ???? ????
+
+search_books:
+  say "Give me a keyword, I'll look for books matching it 😎"
+  hold
+  remember search = event
+  goto display
+
+display:
+	say "Drum roll... 🥁"
+	say Typing(3000)
+  if (!size) remember size = ""
+  if (!category) remember category = ""
+  do res = Fn("books", fav=fav, is_sorted=is_sorted, size=size, category=category, search=search)
+  do cards = []
+  if (res.length() == 0) {
+    say "I haven't found any book matching your query, sorry 😔"
+    goto start
+  }
+
+  foreach (val, index) in res {
+    do newCard = Card(
+      title=val.title,
+      subtitle="{{val.date}} - {{val.rating}} - ❤️{{val.fav}}",
+      image_url=val.image,
+      buttons=[Button("More informations", payload=val.id.to_string())]
+    )
+    if (index < 6) do cards.push(newCard)
+  }
+  say Carousel(
+    cards = cards
+  )
+  goto moreInfos
+
+moreInfos:
+  hold
+  do tmp = event
+  if (!tmp.is_int()) goto start
+  do book = Fn("books", id=tmp.to_int())
+  if (!book || !book.title) {
+    say "I am sorry I haven't got any informsation on this book :("
+    goto start
+  }
+  if (book.description) do description = book.description
+  else do description = "The book description is missing 🤔"
+  if (book.date) do date = book.date
+  else do date = ""
+  say "**{{book.title}}** - {{date}}"
+  say "Description : {{description}}"
+  say Button("Find more great books")
+  goto moreInfos

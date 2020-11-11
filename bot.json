@@ -1,0 +1,33 @@
+{
+  "id": "d1a03ea2-5508-4011-b554-971c741eb158",
+  "name": "Books_en",
+  "description": null,
+  "default_flow": "Workshop",
+  "flows": [
+    {
+      "name": "Introduction",
+      "description": null,
+      "commands": []
+    },
+    {
+      "name": "Workshop",
+      "description": null,
+      "commands": []
+    }
+  ],
+  "files": [],
+  "functions": [
+    {
+      "name": "books",
+      "description": null,
+      "args": [],
+      "import_url": null,
+      "runtime": "nodejs12.x",
+      "handler": "index.handler",
+      "environment": {},
+      "app_id": null,
+      "version": null
+    }
+  ],
+  "apps": []
+}
