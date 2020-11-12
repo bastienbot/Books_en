@@ -85,14 +85,14 @@ sort_books:
 	])
   // 8 - Again, the chatbot needs to wait for the user to reply
   ????
-  // 9 - If the user has clicked on "Yes", create a varaible named `is_sorted`
+  // 9 - If the user has clicked on "Yes", create a variable named `is_sorted`
   // and place the value `true` inside the variable
   if (event match yes_btn) {
     ???? ???? = true
   } else {
     ???? ???? = false
   }
-  // 10 - Finaly, the chatbot needs to goto the step named `display`
+  // 10 - Finaly, the chatbot needs to go to the step named `display`
   ???? ????
 
 search_books:
@@ -133,7 +133,7 @@ moreInfos:
   if (!tmp.is_int()) goto start
   do book = Fn("books", id=tmp.to_int())
   if (!book || !book.title) {
-    say "I am sorry I haven't got any informsation on this book :("
+    say "I am sorry I haven't got any information on this book :("
     goto start
   }
   if (book.description) do description = book.description
